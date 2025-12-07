@@ -65,7 +65,13 @@ func ShortUrlHandler(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	shorturl := createUrl(data.URL)
-	fmt.Fprintf(w, shorturl)
+	// fmt.Fprintf(w, shorturl)
+	response := struct {
+		ShortURL string `json:"short_url"`
+	}{ShortURL: shorturl}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
 
 func main() {
