@@ -71,14 +71,16 @@ func ShortUrlHandler(w http.ResponseWriter, r *http.Request) {
 	}{ShortURL: shorturl}
 
 	fmt.Println(Urldb)
-	
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
 
 func redirectUrlHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Path[len("/redirect/"):]
+	fmt.Println("ID is: ", id)
 	url, err := getUrl(id)
+	fmt.Println(url, url.OriginalUrl)
 	if err != nil {
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 	}
@@ -93,7 +95,6 @@ func main() {
 	http.HandleFunc("/", handle)
 	http.HandleFunc("/shorten", ShortUrlHandler)
 	http.HandleFunc("/redirect", redirectUrlHandler)
-
 
 	fmt.Println("Starting the server at port 8080.....")
 	err := http.ListenAndServe(":8080", nil)
