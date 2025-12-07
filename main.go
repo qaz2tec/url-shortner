@@ -82,7 +82,7 @@ var (
     mu            sync.Mutex
 )
 
-func redirectUrlHandler(w http.ResponseWriter, r *http.Request) {	
+func redirectUrlHandler_one(w http.ResponseWriter, r *http.Request) {	
 	fmt.Println(redirectCount)
 	mu.Lock()
     if redirectCount >= 1 {
@@ -103,6 +103,17 @@ func redirectUrlHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, url.OriginalUrl, http.StatusFound)
 }
 
+func redirectUrlHandler(w http.ResponseWriter, r *http.Request) {	
+	id := r.URL.Path[len("/redirect/"):]
+	// fmt.Println("ID is: ", id)
+	url, err := getUrl(id)
+	// fmt.Println(url, url.OriginalUrl)
+	if err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+	}
+	http.Redirect(w, r, url.OriginalUrl, http.StatusFound)
+}
+
 func main() {
 	// fmt.Println("Url-shortner....")
 	// OriginalUrl := "https://github.com/qaz2tec"
@@ -110,7 +121,8 @@ func main() {
 
 	http.HandleFunc("/", handle)
 	http.HandleFunc("/shorten", ShortUrlHandler)
-	http.HandleFunc("/redirect/", redirectUrlHandler)
+	http.HandleFunc("/shorten", redirectUrlHandler)
+	http.HandleFunc("/redirect/", redirectUrlHandler_one)
 
 	fmt.Println("Starting the server at port 8080.....")
 	err := http.ListenAndServe(":8080", nil)
