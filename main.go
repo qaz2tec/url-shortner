@@ -83,6 +83,7 @@ var (
 )
 
 func redirectUrlHandler(w http.ResponseWriter, r *http.Request) {	
+	fmt.Println(redirectCount)
 	mu.Lock()
     if redirectCount >= 1 {
         mu.Unlock()
