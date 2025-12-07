@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -76,11 +77,25 @@ func ShortUrlHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func redirectUrlHandler(w http.ResponseWriter, r *http.Request) {
+var (
+    redirectCount int
+    mu            sync.Mutex
+)
+
+func redirectUrlHandler(w http.ResponseWriter, r *http.Request) {	
+	mu.Lock()
+    if redirectCount >= 1 {
+        mu.Unlock()
+        http.NotFound(w, r) // return 404 after first call
+        return
+    }
+    redirectCount++
+    mu.Unlock()
+
 	id := r.URL.Path[len("/redirect/"):]
-	fmt.Println("ID is: ", id)
+	// fmt.Println("ID is: ", id)
 	url, err := getUrl(id)
-	fmt.Println(url, url.OriginalUrl)
+	// fmt.Println(url, url.OriginalUrl)
 	if err != nil {
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 	}
