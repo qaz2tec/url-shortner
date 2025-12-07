@@ -75,9 +75,9 @@ func ShortUrlHandler(w http.ResponseWriter, r *http.Request){
 }
 
 func main() {
-	fmt.Println("Url-shortner....")
-	OriginalUrl := "https://github.com/qaz2tec"
-	generateShortUrl(OriginalUrl)
+	// fmt.Println("Url-shortner....")
+	// OriginalUrl := "https://github.com/qaz2tec"
+	// generateShortUrl(OriginalUrl)
 
 	http.HandleFunc("/", handle)
 	http.HandleFunc("/shorten", ShortUrlHandler)
