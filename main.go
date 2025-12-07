@@ -121,8 +121,8 @@ func main() {
 
 	http.HandleFunc("/", handle)
 	http.HandleFunc("/shorten", ShortUrlHandler)
-	http.HandleFunc("/shorten", redirectUrlHandler)
-	http.HandleFunc("/redirect/", redirectUrlHandler_one)
+	http.HandleFunc("/redirect/", redirectUrlHandler)
+	http.HandleFunc("/redirect-one/", redirectUrlHandler_one)
 
 	fmt.Println("Starting the server at port 8080.....")
 	err := http.ListenAndServe(":8080", nil)
