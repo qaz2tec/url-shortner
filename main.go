@@ -55,8 +55,8 @@ func handle(w http.ResponseWriter, r *http.Request) { //Sprintf
 	fmt.Fprintf(w, "Hello World")
 }
 
-func ShortUrlHandler(w http.ResponseWriter, r *http.Request){
-	var data struct{
+func ShortUrlHandler(w http.ResponseWriter, r *http.Request) {
+	var data struct {
 		URL string `json:"url"`
 	}
 	err := json.NewDecoder(r.Body).Decode(&data)
@@ -74,6 +74,15 @@ func ShortUrlHandler(w http.ResponseWriter, r *http.Request){
 	json.NewEncoder(w).Encode(response)
 }
 
+func redirectUrlHandler(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Path[len("/redirect/"):]
+	url, err := getUrl(id)
+	if err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+	}
+	http.Redirect(w, r, url.OriginalUrl, http.StatusFound)
+}
+
 func main() {
 	// fmt.Println("Url-shortner....")
 	// OriginalUrl := "https://github.com/qaz2tec"
@@ -81,6 +90,7 @@ func main() {
 
 	http.HandleFunc("/", handle)
 	http.HandleFunc("/shorten", ShortUrlHandler)
+	http.HandleFunc("/redirect", redirectUrlHandler)
 
 
 	fmt.Println("Starting the server at port 8080.....")
