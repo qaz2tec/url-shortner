@@ -22,11 +22,11 @@ var Urldb = make(map[string]Url)
 func generateShortUrl(OriginalUrl string) string {
 	hasher := md5.New()
 	hasher.Write([]byte(OriginalUrl))
-	fmt.Println("Hasher: ", hasher)
+	// fmt.Println("Hasher: ", hasher)
 	data := hasher.Sum(nil)
-	fmt.Println("Hasher data: ", data)
+	// fmt.Println("Hasher data: ", data)
 	hash := hex.EncodeToString(data)
-	fmt.Println("Encoded String is: ", hash)
+	// fmt.Println("Encoded String is: ", hash)
 	fmt.Println("Encoded String first 8 characters: ", hash[:8])
 	return hash[:8]
 }
