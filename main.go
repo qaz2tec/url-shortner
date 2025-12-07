@@ -70,6 +70,8 @@ func ShortUrlHandler(w http.ResponseWriter, r *http.Request) {
 		ShortURL string `json:"short_url"`
 	}{ShortURL: shorturl}
 
+	fmt.Println(Urldb)
+	
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
