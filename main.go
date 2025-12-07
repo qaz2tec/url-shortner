@@ -28,7 +28,7 @@ func generateShortUrl(OriginalUrl string) string {
 	hash := hex.EncodeToString(data)
 	fmt.Println("Encoded String is: ", hash)
 	fmt.Println("Encoded String first 8 characters: ", hash[:8])
-	return "Hey"
+	return hash[:8]
 }
 
 func createUrl(originalUrl string) string {
